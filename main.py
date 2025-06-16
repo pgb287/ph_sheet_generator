@@ -44,6 +44,11 @@ def combinar_columnas(ws, fila_inicio, fila_fin, columnas):
         if fila_fin > fila_inicio:
             ws.merge_cells(start_row=fila_inicio, start_column=col, end_row=fila_fin, end_column=col)
 
+
+# Cargar planilla base
+wb = load_workbook("planilla_base.xlsx")
+ws = wb.active
+
 # Datos ejemplo (valor_tierra y valor_mejoras aún no utilizados)
 ph_listado = [
     {
@@ -106,9 +111,13 @@ ph_listado = [
     }
 ]
 
-# Cargar planilla base
-wb = load_workbook("planilla_base.xlsx")
-ws = wb.active
+
+# Guardar valores únicos
+valor_tierra = 120000
+valor_mejoras = 350000
+ws["Y15"] = valor_tierra
+ws["Y16"] = valor_mejoras
+ws["Y17"] = valor_tierra + valor_mejoras
 
 # Insertar datos
 insertar_componentes(ws, ph_listado)
