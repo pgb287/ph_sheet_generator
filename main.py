@@ -14,37 +14,43 @@ def insertar_componentes(ws, ph_listado, fila_inicio=15):
                 ws[f"F{fila}"] = componente["m2"]
                 ws[f"G{fila}"] = componente["valor_m2"]
                 ws[f"H{fila}"] = componente["coef_antig"]
-                # Valores nuevos sup_m2 y coef_ajus (ejemplo)
-                ws[f"K{fila}"] = componente.get("sup_m2", 1)    # Si no existe, 1 por defecto
-                ws[f"L{fila}"] = componente.get("coef_ajus", 1) # Si no existe, 1 por defecto
+                ws[f"K{fila}"] = componente.get("sup_m2", 1)
+                ws[f"L{fila}"] = componente.get("coef_ajus", 1)
 
-                ws[f"I{fila}"] = f"=F{fila}*G{fila}*H{fila}"  # cálculo original
-                ws[f"M{fila}"] = f"=K{fila}*L{fila}"          # nuevo cálculo solicitado
+                ws[f"I{fila}"] = f"=F{fila}*G{fila}*H{fila}"
+                ws[f"M{fila}"] = f"=K{fila}*L{fila}"
                 fila += 1
 
         fila_fin_ph = fila - 1
 
-        # Combinar columnas según la lógica previa (se mantiene igual)
-        combinar_columnas(ws, fila_inicio_ph, fila_fin_ph, columnas=[2,3,4]) # B, C, D
-        combinar_columnas(ws, fila_inicio_ph, fila_fin_ph, columnas=list(range(11, 20))) # K a S (columnas 11 a 19)
+        combinar_columnas(ws, fila_inicio_ph, fila_fin_ph, columnas=[2, 3, 4])  # B, C, D
+        combinar_columnas(ws, fila_inicio_ph, fila_fin_ph, columnas=list(range(11, 20)))  # K a S
 
-        # Insertar total en columna J (col 10)
+        # Total por PH en columna J
         if fila_fin_ph > fila_inicio_ph:
             ws.merge_cells(start_row=fila_inicio_ph, start_column=10, end_row=fila_fin_ph, end_column=10)
             ws[f"J{fila_inicio_ph}"] = f"=SUM(I{fila_inicio_ph}:I{fila_fin_ph})"
         else:
             ws[f"J{fila_inicio_ph}"] = f"=I{fila_inicio_ph}"
 
+    # Fila de totales generales (una fila más abajo del último componente)
+    fila_total = fila
+    for col in range(13, 20):  # Columnas M (13) a S (19)
+        letra_col = chr(64 + col)
+        ws[f"{letra_col}{fila_total}"] = f"=SUM({letra_col}{fila_inicio}:{letra_col}{fila - 1})"
+
 def combinar_columnas(ws, fila_inicio, fila_fin, columnas):
     for col in columnas:
         if fila_fin > fila_inicio:
             ws.merge_cells(start_row=fila_inicio, start_column=col, end_row=fila_fin, end_column=col)
 
-# Datos ejemplo con sup_m2 y coef_ajus para cada componente
+# Datos ejemplo (valor_tierra y valor_mejoras aún no utilizados)
 ph_listado = [
     {
         "padron": "P-90001",
         "unidad": 5,
+        "valor_tierra": 12000,
+        "valor_mejoras": 35000,
         "poligonos": [
             {
                 "poligono": "00-01",
@@ -65,6 +71,8 @@ ph_listado = [
     {
         "padron": "P-90002",
         "unidad": 6,
+        "valor_tierra": 15000,
+        "valor_mejoras": 40000,
         "poligonos": [
             {
                 "poligono": "00-01",
@@ -78,6 +86,8 @@ ph_listado = [
     {
         "padron": "P-90003",
         "unidad": 7,
+        "valor_tierra": 11000,
+        "valor_mejoras": 28000,
         "poligonos": [
             {
                 "poligono": "00-01",
