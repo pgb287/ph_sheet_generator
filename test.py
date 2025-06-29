@@ -5,7 +5,9 @@ ph_listado = []
 
 class PHApp:
     def __init__(self, root):
-        self.root = root
+        self.root = root        
+        self.root.geometry("450x800") #ancho x alto
+        #self.root.resizable(False, True) # No permitir redimensionar en ancho, pero sí en alto    
         self.root.title("PLANILLA DE PH")
         self.contador_unidades = 1
         self.contador_padron = None  # Se inicia al guardar el primer PH
@@ -210,8 +212,7 @@ class PHApp:
                     self.tree.insert(pol_id, 'end', text=desc)
 
 if __name__ == "__main__":
-    root = tk.Tk()
-    root.geometry("450x800")
+    root = tk.Tk()    
     app = PHApp(root)
     root.mainloop()
     print(ph_listado)
