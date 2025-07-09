@@ -140,14 +140,24 @@ def restar_columna_s_menos_q(ws, filas_combinadas):
         ws[f"R{fila}"] = f"=S{fila}-Q{fila}"
 
 
-
+"""
 # =======================
 # SCRIPT PRINCIPAL
 # =======================
 
 # Cargar planilla base
-wb = load_workbook("planilla_base.xlsx")
-ws = wb.active
+try:
+    wb = load_workbook("planilla_base.xlsx", data_only=True)
+    ws = wb.active
+    if ws is None:
+        # Intentar obtener la primera hoja si no hay una activa
+        ws = wb.worksheets[0] if wb.worksheets else None
+        if ws is None:
+            raise ValueError("No se encontró ninguna hoja de trabajo")
+except Exception as e:
+    print(f"Error al cargar el archivo Excel: {e}")
+    print("Asegúrate de que el archivo no esté abierto en Excel")
+    exit(1)
 
 # Datos de ejemplo
 ph_listado = [
@@ -253,3 +263,4 @@ wb.save("planilla_final.xlsx")
 # Para control visual en consola (opcional)
 #print("Filas combinadas (PH):", filas_combinadas)
 #print("Primera fila libre:", fila_fin)
+"""
