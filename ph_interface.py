@@ -411,9 +411,22 @@ class PHInterface:
     def clear_all(self):
         """Limpiar todos los datos"""
         if messagebox.askyesno("Confirmar", "¿Estás seguro de que quieres limpiar todos los datos?"):
+            # Limpiar lista de PHs
             self.ph_listado = []
-            self.valor_tierra.set(5924.8)
-            self.valor_mejoras.set(209041.58)
+            
+            # Limpiar todos los campos de valores generales
+            self.plano_nro.set("")
+            self.dpto.set("")
+            self.localidad.set("")
+            self.barrio.set("")
+            self.circ.set("")
+            self.secc.set("")
+            self.mza.set("")
+            self.parc.set("")
+            self.valor_tierra.set(0.0)
+            self.valor_mejoras.set(0.0)
+            
+            # Actualizar las vistas
             self.refresh_ph_tree()
             self.refresh_componentes_tree(-1)
 
